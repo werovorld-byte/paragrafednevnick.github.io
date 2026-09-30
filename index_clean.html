@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Электронный дневник 5Б</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#eef4ff,#f9fbff);color:#172033;min-height:100vh}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.wrap{width:min(1080px,calc(100% - 24px));margin:auto}.card{background:#fff;border-radius:22px;box-shadow:0 18px 50px #536b9c20}
+.login{min-height:100vh;display:grid;place-items:center;padding:20px}.login-card{width:min(400px,100%);padding:30px;animation:up .5s ease}
+@keyframes up{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:none}}
+.logo{margin:auto auto 16px;width:62px;height:62px;border-radius:18px;background:#5d7cff;color:#fff;display:grid;place-items:center;font-weight:800;font-size:25px}
+h1,h2{margin-top:0}.center{text-align:center}.muted{color:#7a8699}.field{margin:15px 0}.field label{display:block;font-weight:700;font-size:14px;margin-bottom:7px}
+input,select,textarea{width:100%;padding:13px 14px;border:1px solid #d9e1ee;border-radius:12px;outline:0;background:#fff}
+input:focus,select:focus,textarea:focus{border-color:#6684ff;box-shadow:0 0 0 4px #6684ff18}textarea{min-height:110px;resize:vertical}
+.primary,.secondary,.danger{border-radius:12px;padding:12px 15px;font-weight:700}.primary{border:0;background:#5d7cff;color:white}.primary:hover{background:#4f70f1}
+.secondary{border:1px solid #dbe2ee;background:#fff;color:#344054}.danger{border:0;background:#fff0f0;color:#d84848}
+.top{position:sticky;top:0;z-index:5;background:#ffffffdf;backdrop-filter:blur(12px);border-bottom:1px solid #e8edf4}.topin{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-size:20px;font-weight:800}.brand b{color:#5d7cff}.user{display:flex;align-items:center;gap:9px}.badge{background:#eef2ff;color:#536fe5;padding:7px 10px;border-radius:99px;font-size:12px;font-weight:700}
+main{padding:28px 0 60px}.hero{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:20px}.hero h1{font-size:30px;margin-bottom:6px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel{padding:21px}.panel h2{font-size:20px}.hw{border:1px solid #e4e9f2;border-radius:16px;padding:17px;margin-bottom:12px}.hwhead{display:flex;justify-content:space-between;gap:10px}.subject{font-weight:800;font-size:18px}.date{color:#788498;font-size:13px}.text{white-space:pre-wrap;line-height:1.5;margin:12px 0}.photo{width:100%;max-height:300px;object-fit:cover;border-radius:12px}.actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.empty{text-align:center;color:#8a95a7;padding:35px 10px}
+.modal{position:fixed;inset:0;background:#17203366;display:grid;place-items:center;padding:18px;z-index:20}.modalbox{width:min(550px,100%);max-height:90vh;overflow:auto;padding:23px}.modalhead{display:flex;justify-content:space-between}.close{border:0;background:#f0f3f7;border-radius:50%;width:36px;height:36px;font-size:20px}.account{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #edf0f5}
+.toast{position:fixed;right:16px;bottom:16px;background:#172033;color:#fff;padding:12px 15px;border-radius:12px;z-index:50}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.hero{align-items:flex-start;flex-direction:column}.hero h1{font-size:27px}.user .badge{display:none}.topin{min-height:62px}.login-card{padding:24px 19px}}
+
+/* ===== Главная страница 5Б ===== */
+.hero5b{
+  position:relative;
+  overflow:hidden;
+  margin-bottom:22px;
+  padding:30px;
+  border-radius:28px;
+  background:linear-gradient(135deg,#6d5dfc 0%,#8f7cff 48%,#55c7ff 100%);
+  color:#fff;
+  box-shadow:0 18px 45px rgba(87,76,190,.22);
+  animation:heroIn .7s ease both;
+}
+.hero5b:before,.hero5b:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,.13);
+  animation:floatBlob 7s ease-in-out infinite;
+}
+.hero5b:before{width:180px;height:180px;right:-45px;top:-70px}
+.hero5b:after{width:110px;height:110px;left:45%;bottom:-70px;animation-delay:-2s}
+.hero5b-content{position:relative;z-index:1}
+.hero5b-kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.16);
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:13px;
+}
+.hero5b h1{
+  margin:0 0 8px;
+  font-size:clamp(30px,5vw,48px);
+  line-height:1.04;
+  letter-spacing:-1px;
+}
+.hero5b p{margin:0;opacity:.9;font-size:16px}
+.hero5b-bubbles{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.hero5b-bubbles span{
+  padding:9px 13px;border-radius:13px;
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(8px);
+  font-size:13px;font-weight:600
+}
+.home-grid5b{
+  display:grid;
+  grid-template-columns:minmax(0,1.55fr) minmax(260px,.75fr);
+  gap:18px;
+  margin-bottom:22px;
+}
+.card5b{
+  background:var(--card,#fff);
+  border:1px solid rgba(100,100,140,.10);
+  border-radius:22px;
+  padding:20px;
+  box-shadow:0 10px 28px rgba(35,38,70,.07);
+  animation:cardIn .6s ease both;
+}
+.card5b:nth-child(2){animation-delay:.08s}
+.card5b-title{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;margin-bottom:15px
+}
+.card5b-title h2{font-size:20px;margin:0}
+.card5b-title small{opacity:.6}
+.schedule5b{display:grid;gap:9px}
+.lesson5b{
+  display:grid;
+  grid-template-columns:48px 1fr auto;
+  align-items:center;
+  gap:12px;
+  padding:12px;
+  border-radius:15px;
+  background:rgba(120,120,160,.055);
+  transition:transform .2s ease,background .2s ease;
+}
+.lesson5b:hover{transform:translateX(4px);background:rgba(109,93,252,.08)}
+.lesson-num{
+  width:38px;height:38px;border-radius:12px;
+  display:grid;place-items:center;
+  background:rgba(109,93,252,.12);
+  font-weight:800;color:#5e50df
+}
+.lesson-name{font-weight:700}
+.lesson-room{font-size:12px;opacity:.58;margin-top:2px}
+.lesson-time{
+  font-size:12px;font-weight:700;opacity:.62;
+  white-space:nowrap
+}
+.quick5b{display:grid;gap:10px}
+.quick-item5b{
+  display:flex;align-items:center;gap:12px;
+  padding:13px;border-radius:15px;
+  background:rgba(120,120,160,.055);
+  transition:transform .2s ease
+}
+.quick-item5b:hover{transform:translateY(-2px)}
+.quick-icon5b{
+  width:38px;height:38px;border-radius:12px;
+  display:grid;place-items:center;background:rgba(109,93,252,.12)
+}
+.quick-item5b b{display:block;font-size:14px}
+.quick-item5b span{font-size:12px;opacity:.6}
+.home-section-title{
+  display:flex;align-items:center;gap:10px;margin:8px 0 14px
+}
+.home-section-title h2{margin:0;font-size:22px}
+@keyframes heroIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes cardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes floatBlob{0%,100%{transform:translate(0,0)}50%{transform:translate(-18px,15px)}}
+@media(max-width:760px){
+  .home-grid5b{grid-template-columns:1fr}
+  .hero5b{padding:24px 20px;border-radius:23px}
+  .lesson5b{grid-template-columns:42px 1fr}
+  .lesson-time{grid-column:2}
+}
+
+</style>
+</head>
+<body>
+
+<div id="loginPage" class="login">
+<div class="card login-card">
+<div class="logo">5Б</div><h1 class="center">Дневник 5 «Б»</h1>
+<p class="muted center">Электронный дневник</p>
+<form id="loginForm">
+<div class="field"><label>Логин</label><input id="login" autocomplete="username" placeholder="Введите логин" required></div>
+<div class="field"><label>Пароль</label><input id="password" type="password" autocomplete="current-password" placeholder="Введите пароль" required></div>
+<div id="loginError" class="center" style="color:#d84848;min-height:20px;font-size:13px"></div>
+<button class="primary" style="width:100%">Войти</button>
+</form>
+</div>
+</div>
+
+<div id="app" class="hidden">
+<header class="top"><div class="wrap topin"><div class="brand">Дневник <b>5 «Б»</b></div><div class="user"><span id="roleBadge" class="badge"></span><span id="userName"></span><button class="secondary" onclick="logout()">Выйти</button></div></div></header>
+<main class="wrap">
+<section id="home5b" class="home5b">
+  <div class="hero5b">
+    <div class="hero5b-content">
+      <div class="hero5b-kicker">✨ Класс 5 «Б»</div>
+      <h1>Электронный дневник 5Б</h1>
+      <p>Домашние задания, расписание и всё важное для нашего класса — в одном месте.</p>
+      <div class="hero5b-bubbles">
+        <span>📚 Учимся</span>
+        <span>📝 Выполняем</span>
+        <span>🚀 Двигаемся вперёд</span>
+      </div>
+    </div>
+  </div>
+
+  
+    </div>
+
+    <div class="card5b">
+      <div class="card5b-title"><h2>⚡ Быстрый доступ</h2></div>
+      <div class="quick5b">
+        <div class="quick-item5b">
+          <div class="quick-icon5b">📝</div>
+          <div><b>Домашнее задание</b><span>Смотри задания ниже</span></div>
+        </div>
+        <div class="quick-item5b">
+          <div class="quick-icon5b">👨‍🏫</div>
+          <div><b>Учителя</b><span>Раздел управления аккаунтами</span></div>
+        </div>
+        <div class="quick-item5b">
+          <div class="quick-icon5b">📱</div>
+          <div><b>Всегда с собой</b><span>Работает на телефоне и компьютере</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hero"><div><h1>Домашнее задание</h1><div class="muted">Задания класса в одном месте</div></div><div id="teacherTools" class="hidden"><button class="primary" onclick="openHW()">＋ Добавить ДЗ</button></div></div>
+<div class="grid">
+<section class="card panel"><h2>📚 Задания</h2><div id="homeworkList"></div></section>
+<section id="adminPanel" class="card panel hidden"><h2>👥 Аккаунты</h2><button class="primary" onclick="openAccount()">＋ Добавить ученика</button><div id="accounts" style="margin-top:12px"></div></section>
+</div>
+</main></div>
+
+<div id="hwModal" class="modal hidden"><div class="card modalbox"><div class="modalhead"><h2 id="hwTitle">Добавить ДЗ</h2><button class="close" onclick="closeModal('hwModal')">×</button></div>
+<form id="hwForm"><input id="hwId" type="hidden">
+<div class="field"><label>Предмет</label><input id="subject" required placeholder="Математика"></div>
+<div class="field"><label>Дата</label><input id="date" type="date" required></div>
+<div class="field"><label>Задание</label><textarea id="hwText" required placeholder="Что нужно сделать?"></textarea></div>
+<div class="field"><label>Фото</label><input id="photo" type="file" accept="image/*"></div>
+<div id="photoHint" class="muted" style="font-size:12px"></div>
+<button class="primary" style="width:100%">Сохранить</button></form></div></div>
+
+<div id="accountModal" class="modal hidden"><div class="card modalbox"><div class="modalhead"><h2>Новый аккаунт</h2><button class="close" onclick="closeModal('accountModal')">×</button></div>
+<form id="accountForm"><div class="field"><label>Имя</label><input id="accName" required placeholder="Имя пользователя"></div>
+<div class="field"><label>Логин</label><input id="accLogin" required></div>
+<div class="field"><label>Пароль</label><input id="accPass" type="password" required></div>
+<div class="field"><label>Роль</label><select id="accRole"><option value="student">Ученик</option><option value="teacher">Учитель</option><option value="admin">Администратор</option></select></div>
+<button class="primary" style="width:100%">Создать</button></form></div></div>
+
+<script>
+const USERS_KEY="diary5b_users_v2",HW_KEY="diary5b_hw_v1";
+const CLEAN_USERS_VERSION="2";
+
+/* При первом запуске создаём только аккаунт Марка.
+   После этого новые аккаунты учителей и учеников сохраняются. */
+let users;
+if(localStorage.getItem("diary5b_clean_users_version")!==CLEAN_USERS_VERSION){
+  users=[{name:"Марк",login:"Марк",password:"test",role:"admin"}];
+  localStorage.setItem(USERS_KEY,JSON.stringify(users));
+  localStorage.setItem("diary5b_clean_users_version",CLEAN_USERS_VERSION);
+}else{
+  try{users=JSON.parse(localStorage.getItem(USERS_KEY)||"[]")}catch(e){users=[]}
+  if(!Array.isArray(users))users=[];
+  if(!users.some(u=>u.login==="Марк"&&u.role==="admin")){
+    users.unshift({name:"Марк",login:"Марк",password:"test",role:"admin"});
+    localStorage.setItem(USERS_KEY,JSON.stringify(users));
+  }
+}
+
+let homework=JSON.parse(localStorage.getItem(HW_KEY)||"[]");
+let currentUser=null;
+
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(USERS_KEY,JSON.stringify(users));localStorage.setItem(HW_KEY,JSON.stringify(homework))}
+function roleName(r){return r==="admin"?"Администратор":r==="teacher"?"Учитель":"Ученик"}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function closeModal(id){$(id).classList.add("hidden")}
+function toast(t){const x=document.createElement("div");x.className="toast";x.textContent=t;document.body.appendChild(x);setTimeout(()=>x.remove(),2200)}
+
+$("loginForm").onsubmit=e=>{
+ e.preventDefault();
+ const l=$("login").value.trim(),p=$("password").value;
+ const u=users.find(x=>x.login===l&&x.password===p);
+ if(!u){$("loginError").textContent="Неверный логин или пароль";return}
+ currentUser=u;$("loginPage").classList.add("hidden");$("app").classList.remove("hidden");
+ $("userName").textContent=u.name;$("roleBadge").textContent=roleName(u.role);
+ $("teacherTools").classList.toggle("hidden",!(u.role==="teacher"||u.role==="admin"));
+ $("adminPanel").classList.toggle("hidden",!(u.role==="admin"||u.role==="teacher"));
+ render();
+};
+function logout(){currentUser=null;$("app").classList.add("hidden");$("loginPage").classList.remove("hidden");$("loginForm").reset();$("loginError").textContent=""}
+
+
+
+function render(){renderHomework();renderAccounts()}
+function renderHomework(){
+ const box=$("homeworkList");
+ if(!homework.length){box.innerHTML='<div class="empty">Пока нет домашних заданий.</div>';return}
+ const arr=[...homework].sort((a,b)=>b.date.localeCompare(a.date));
+ box.innerHTML=arr.map(h=>{
+  const can=currentUser.role==="teacher"||currentUser.role==="admin";
+  return `<article class="hw">
+  <div class="hwhead"><div class="subject">${esc(h.subject)}</div><div class="date">${new Date(h.date+"T12:00:00").toLocaleDateString("ru-RU")}</div></div>
+  <div class="text">${esc(h.text)}</div>${h.photo?`<img class="photo" src="${h.photo}" alt="Фото задания">`:""}
+  ${can?`<div class="actions"><button class="secondary" onclick="editHW('${h.id}')">Изменить</button><button class="danger" onclick="deleteHW('${h.id}')">Удалить</button></div>`:""}
+  </article>`;
+ }).join("");
+}
+
+function openHW(id=""){
+ $("hwForm").reset();$("hwId").value=id;$("hwTitle").textContent=id?"Изменить ДЗ":"Добавить ДЗ";$("photoHint").textContent="";
+ if(id){const h=homework.find(x=>x.id===id);$("subject").value=h.subject;$("date").value=h.date;$("hwText").value=h.text;$("photoHint").textContent=h.photo?"Фото уже есть. Новое фото заменит его.":""}
+ $("hwModal").classList.remove("hidden");
+}
+function editHW(id){openHW(id)}
+function deleteHW(id){if(confirm("Удалить это задание?")){homework=homework.filter(x=>x.id!==id);save();renderHomework();toast("Задание удалено")}}
+
+$("hwForm").onsubmit=e=>{
+ e.preventDefault();
+ const id=$("hwId").value, old=id?homework.find(x=>x.id===id):null, file=$("photo").files[0];
+ const finish=photo=>{
+  const item={id:id||String(Date.now()),subject:$("subject").value.trim(),date:$("date").value,text:$("hwText").value.trim(),photo:photo||old?.photo||""};
+  if(id)homework=homework.map(x=>x.id===id?item:x);else homework.push(item);
+  save();renderHomework();closeModal("hwModal");toast(id?"Задание изменено":"Задание добавлено");
+ };
+ if(file){const reader=new FileReader();reader.onload=()=>finish(reader.result);reader.readAsDataURL(file)}else finish("");
+};
+
+function openAccount(){$("accountForm").reset();$("accountModal").classList.remove("hidden")}
+function renderAccounts(){
+ if(!currentUser||!(currentUser.role==="admin"||currentUser.role==="teacher"))return;
+ const isAdmin=currentUser.role==="admin";
+ const list=isAdmin ? users : users.filter(u=>u.role==="student");
+ $("accounts").innerHTML=list.length
+   ? list.map(u=>{
+       const i=users.indexOf(u);
+       const protectedAccount=u.login==="Марк"&&u.role==="admin";
+       const canDelete=isAdmin ? !protectedAccount : u.role==="student";
+       return `<div class="account"><div><b>${esc(u.name)}</b><div class="muted" style="font-size:12px">${esc(u.login)} · ${roleName(u.role)}</div></div>${canDelete?`<button class="danger" onclick="removeAccount(${i})">Удалить</button>`:'<span class="muted" style="font-size:12px">системный</span>'}</div>`;
+     }).join("")
+   : '<div class="empty">Пока нет учеников.</div>';
+}
+
+function openAccount(){
+ $("accountForm").reset();
+ const role=$("accRole");
+ if(currentUser&&currentUser.role==="teacher"){
+   role.value="student";
+   role.querySelectorAll("option").forEach(o=>o.hidden=o.value!=="student");
+ }else{
+   role.querySelectorAll("option").forEach(o=>o.hidden=false);
+ }
+ $("accountModal").classList.remove("hidden");
+}
+
+$("accountForm").onsubmit=e=>{
+ e.preventDefault();
+ const name=$("accName").value.trim(),login=$("accLogin").value.trim(),password=$("accPass").value,role=$("accRole").value;
+ if(currentUser.role==="teacher" && role!=="student"){alert("Учитель может создавать только учеников");return}
+ if(users.some(u=>u.login===login)){alert("Такой логин уже существует");return}
+ users.push({name,login,password,role});
+ save();renderAccounts();closeModal("accountModal");toast(role==="student"?"Ученик добавлен":"Аккаунт создан");
+};
+
+function removeAccount(i){
+ const u=users[i];
+ if(!u)return;
+ if(u.login==="Марк"&&u.role==="admin"){alert("Главного администратора удалить нельзя");return}
+ if(currentUser.role==="teacher"&&u.role!=="student"){alert("Учитель может удалять только учеников");return}
+ if(confirm("Удалить аккаунт?")){
+   users.splice(i,1);save();renderAccounts();toast("Аккаунт удалён");
+ }
+}
+window.onclick=e=>{if(e.target.classList.contains("modal"))e.target.classList.add("hidden")}
+
+</script>
+</body>
+</html>
